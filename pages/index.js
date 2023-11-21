@@ -3,9 +3,18 @@ import Post from "../components/post"
 import Curso from "../components/curso"
 import Layout from "../components/layout"
 import styles from "../styles/grid.module.css"
-
+import { useEffect, useState } from "react"
+import Spinner from "../components/spinner"
 
 export default function Home({guitarras, posts, curso}) {
+
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    if(guitarras && posts && curso) {
+      setCargando(false)
+    }
+  }, [guitarras, posts, curso])
 
   return (
 
@@ -14,32 +23,38 @@ export default function Home({guitarras, posts, curso}) {
       <Layout
         title={'Inicio'}
         description={'Blog de música, venta de guitarras y más'}
-      >
+      >{cargando ? <Spinner /> : (
+        <>
         <main className="contenedor">
-          <h1 className="heading">Nuestra Colección</h1>
-          <div className={styles.grid}>
-            {guitarras?.map(guitarra => (
-              <Guitarra
-                key={guitarra.id}
-                guitarra={guitarra.attributes}
-              />
-            ))}
-          </div>
-        </main>
-        <Curso
-          curso={curso.attributes}
-        />
-        <section className="contenedor">
-          <h2 className="heading">Blog</h2>
-          <div className={styles.grid}>
-            {posts?.map(post => (
-              <Post
-                key={post.id}
-                post={post.attributes}
-              />
-            ))}
-          </div>
-        </section>
+          
+           
+            <h1 className="heading">Nuestra Colección</h1>
+            <div className={styles.grid}>
+              {guitarras?.map(guitarra => (
+                <Guitarra
+                  key={guitarra.id}
+                  guitarra={guitarra.attributes}
+                />
+              ))}
+            </div>
+          </main>
+          <Curso
+            curso={curso.attributes}
+          />
+          <section className="contenedor">
+            <h2 className="heading">Blog</h2>
+            <div className={styles.grid}>
+              {posts?.map(post => (
+                <Post
+                  key={post.id}
+                  post={post.attributes}
+                />
+              ))}
+            </div>
+          </section>
+          </>
+          )}
+          
        
       </Layout>
     </>

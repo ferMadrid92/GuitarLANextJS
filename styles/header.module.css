@@ -40,3 +40,12 @@
 .active {
     background-color: var(--primary);
 }
+.blink {
+    animation: blinker 1.6s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+        background-color: var(--primary);
+    }
+  }

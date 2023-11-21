@@ -1,8 +1,19 @@
+import { useEffect, useState } from "react"
 import Layout from "../components/layout"
 import Post from "../components/post"
+import Spinner from "../components/spinner"
 import styles from "../styles/grid.module.css"
 
 export default function Blog({posts}) {
+
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    if(posts) {
+      setCargando(false)
+    }
+  }, [posts])
+
   return (
     <Layout
         title={'Blog'}
@@ -10,14 +21,17 @@ export default function Blog({posts}) {
     >
        <main className="contenedor">
         <h1 className="heading">Blog</h1>
-        <div className={styles.grid}>
-          {posts?.map(post => (
-            <Post
-              key={post.id}
-              post={post.attributes}
-            />
-          ))}
-        </div>
+        {cargando ? <Spinner /> : (
+            <div className={styles.grid}>
+              {posts?.map(post => (
+                <Post
+                  key={post.id}
+                  post={post.attributes}
+                />
+              ))}
+            </div>
+        ) }
+
        </main>
     </Layout>
   )

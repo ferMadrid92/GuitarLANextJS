@@ -1,8 +1,18 @@
 import Layout from "../components/layout"
 import Guitarra from "../components/guitarra"
 import styles from '../styles/grid.module.css'
+import { useEffect, useState } from "react"
+import Spinner from "../components/spinner"
 
 export default function Tienda({guitarras}) {
+
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    if(guitarras) {
+      setCargando(false)
+    }
+  }, [guitarras])
   
   return (
     <Layout
@@ -11,14 +21,17 @@ export default function Tienda({guitarras}) {
     >
        <main className="contenedor">
           <h1 className="heading">Nuestra Colección</h1>
-          <div className={styles.grid}>
-            {guitarras?.map(guitarra => (
-              <Guitarra
-                key={guitarra.id}
-                guitarra={guitarra.attributes}
-              />
-            ))}
-          </div>
+          {cargando ? <Spinner /> : (
+              <div className={styles.grid}>
+              {guitarras?.map(guitarra => (
+                <Guitarra
+                  key={guitarra.id}
+                  guitarra={guitarra.attributes}
+                />
+              ))}
+            </div>
+          )}
+
        </main>
     </Layout>
   )

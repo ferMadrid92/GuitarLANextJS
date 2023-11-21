@@ -7,3 +7,7 @@ export const formatearFecha = fecha => {
     }
     return fechaNueva.toLocaleDateString('es-ES', opciones)
 }
+
+export const formatearNumero = numero => {
+    return numero.toLocaleString('en-US')
+  }

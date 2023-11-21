@@ -2,6 +2,8 @@ import {useEffect, useState} from 'react'
 import Image from 'next/image'
 import Layout from '../components/layout'
 import styles from '../styles/carrito.module.css'
+import { toast } from 'react-toastify'
+import { formatearNumero } from '../utils/helpers'
 
 export default function Carrito({carrito,actualizarCantidad,eliminarProducto}) {
 
@@ -11,6 +13,11 @@ export default function Carrito({carrito,actualizarCantidad,eliminarProducto}) {
         const calculoTotal = carrito.reduce((total, producto) => total + (producto.cantidad * producto.precio), 0)
         setTotal(calculoTotal)
     },[carrito])
+
+    const handleClick = (producto) => {
+        eliminarProducto(producto.id)
+        toast.info('Producto eliminado')
+    }
 
   return (
     <Layout title='Carrito de Compras'>
@@ -46,12 +53,12 @@ export default function Carrito({carrito,actualizarCantidad,eliminarProducto}) {
                                         </select>
                                     </div>
                                     <p className={styles.precio}>$<span>{producto.precio}</span></p>
-                                    <p className={styles.subtotal}>Subtotal: $<span>{producto.cantidad * producto.precio}</span></p>
+                                    <p className={styles.subtotal}>Subtotal: $<span>{formatearNumero(producto.cantidad * producto.precio)}</span></p>
                                 </div>
                                 <button
                                     className={styles.eliminar}
                                     type='button'
-                                    onClick={() => eliminarProducto(producto.id)}
+                                    onClick={() => handleClick(producto)}
                                 >   
                                     X
                                 </button>
@@ -61,7 +68,7 @@ export default function Carrito({carrito,actualizarCantidad,eliminarProducto}) {
             </div>
             <aside className={styles.resumen}>
                 <h3>Resumen del pedido</h3>
-                <p>Total a pagar: ${total}</p>
+                <p>Total a pagar: ${formatearNumero(total)}</p>
             </aside>
         </div>
       </main>

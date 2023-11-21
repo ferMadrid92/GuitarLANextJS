@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
     return(
-        <Html>
+        <Html lang='es'>
             <Head>
                 <meta name='description' content='GuitarLA - Venta de guitarras y blog de música' />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
