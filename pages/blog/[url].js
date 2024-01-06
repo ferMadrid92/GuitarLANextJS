@@ -27,13 +27,36 @@ export default function Post({post}) {
 }
 
 
-export async function getServerSideProps({query: {url}}) {
+export async function getStaticPaths() {
+    const respuesta = await fetch(`${process.env.API_URL}/posts`);
+    const {data: posts} = await respuesta.json();
     
-    const respuesta = await fetch(`${process.env.API_URL}/posts?filters[url]=${url}&populate=imagen`)
-    const {data: post} = await respuesta.json()
+    const paths = posts.map((post) => ({
+        params: { url: post.attributes.url },
+    }));
+
+    return { paths, fallback: false };
+}
+
+export async function getStaticProps({params: {url}}) {
+    const respuesta = await fetch(`${process.env.API_URL}/posts?filters[url]=${url}&populate=imagen`);
+    const {data: post} = await respuesta.json();
+
     return {
         props: {
             post
-        }
-    }
+        },
+        revalidate: 1, // Esto hará que la página se regenere cada segundo
+    };
 }
+
+// export async function getServerSideProps({query: {url}}) {
+    
+//     const respuesta = await fetch(`${process.env.API_URL}/posts?filters[url]=${url}&populate=imagen`)
+//     const {data: post} = await respuesta.json()
+//     return {
+//         props: {
+//             post
+//         }
+//     }
+// }
